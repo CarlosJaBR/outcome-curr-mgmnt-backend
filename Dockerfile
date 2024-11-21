@@ -19,7 +19,7 @@ RUN mvn install:install-file \
     -Dpackaging=jar
 
 # Clean and Install with maven
-RUN mvn clean install -DskipTests
+RUN mvn clean install
 
 
 # Use the image for the runtime
