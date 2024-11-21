@@ -1,7 +1,6 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'outcome-curr-mgmt-backend'
         DOCKER_PORT = '9090:8080'
     }
     stages {
@@ -9,9 +8,9 @@ pipeline {
             steps {
                 script {
                     echo 'Docker info'
-                    bat 'docker info'
+                    sh 'docker info'
                     echo 'Build Docker image'
-                    docker.build("${IMAGE_NAME}")
+                    sh 'docker build -t outcome-curr-mgmt-backend .'
                 }
             }
         }
@@ -20,9 +19,8 @@ pipeline {
             steps {
                 script {
                     echo 'Execute unit tests'
-                    docker.image("${IMAGE_NAME}").inside {
-                        bat 'mvn test'
-                    }
+                    sh 'mvn test'
+
                 }
             }
         }
