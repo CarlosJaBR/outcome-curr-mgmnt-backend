@@ -1,12 +1,16 @@
-FROM maven:3.9.9-eclipse-temurin-17 AS build
 
-#Workspace
+FROM maven:3.8.8-eclipse-temurin-17 AS build
+
+# Set the working directory
 WORKDIR /app
 
-#Source
+# Copy app source
 COPY . .
 
-# Use maven command
+# esto por si el mvnw no se crea que con este pasa pero con saamfi no
+RUN mvn -N io.takari:maven:wrapper
+
+# Make sure the mvnw script is executable
 RUN chmod +x mvnw
 
 # Copy and install custom JAR
@@ -18,20 +22,20 @@ RUN mvn install:install-file \
     -Dversion=11.2.0.3 \
     -Dpackaging=jar
 
-# Clean and Install with maven
-RUN mvn clean install
+# Compile and package the Spring Boot application
+RUN mvn clean install -DskipTests
 
 
-# Use the image for the runtime
+# Use a smaller image for the runtime
 FROM eclipse-temurin:17-jre
-
-# workspace
+#
+# Set the working directory
 WORKDIR /app
 
 # Copy the JAR file from the build stage
 COPY --from=build /app/outcome-curr-mgmt/target/outcome-curr-mgmt-1.0-SNAPSHOT.jar /app/outcurr-app.jar
 
-EXPOSE 8080
+EXPOSE 9092
 
 # Run the Spring Boot app
 CMD ["java", "-jar", "/app/outcurr-app.jar"]
