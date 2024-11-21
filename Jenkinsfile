@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     echo 'Run the app'
-                    docker.image("${IMAGE_NAME}").run("-p ${DOCKER_PORT}")
+                    bat "docker run -p ${DOCKER_PORT} outcome-curr-mgmt-backend"
                 }
             }
         }
