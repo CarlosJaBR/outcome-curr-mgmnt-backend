@@ -8,6 +8,8 @@ pipeline {
         stage('Docker Image Build') {
             steps {
                 script {
+                    echo 'Docker info'
+                    bat 'docker info'
                     echo 'Build Docker image'
                     docker.build("${IMAGE_NAME}")
                 }
