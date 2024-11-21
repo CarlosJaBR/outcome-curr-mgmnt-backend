@@ -307,4 +307,107 @@ public class AcademicPeriodControllerSmokeIT extends BaseSmokeIT {
                 });
     }
 
+    //My own test - BY CARLOS BOLAÑOS
+
+
+    // Primera prueba: Prueba de inicio de sesión y obtención de token JWT
+    @Test
+    void testLoginAndJWTToken() {
+        TestRestTemplate testRestTemplate = new TestRestTemplate();
+        HttpHeaders headers = getHeaders();
+
+        // Solicitar el token JWT
+        ResponseEntity<String> response = testRestTemplate.postForEntity(
+                server + "/outcurrapi/v1/auth/login",
+                new HttpEntity<>(headers),
+                String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());  // El cuerpo debe contener el token JWT
+    }
+    //Segunda prueba:  Verificación de la creación de un período académico
+    @Test
+    void testCreateAcademicPeriodSmoke() {
+        TestRestTemplate testRestTemplate = new TestRestTemplate();
+        String token = "Bearer " + testUserJWTToken;
+        HttpHeaders headers = getHeaders();
+        headers.set("Authorization", token);
+
+        HttpEntity<AcadPeriodInDTO> jwtEntity = new HttpEntity<>(acadPeriodInDTO, headers);
+        ResponseEntity<AcadPeriodOutDTO> response = testRestTemplate.postForEntity(
+                server + OUTCURRAPI_V_1_AUTH_ACAD_PERIODS + "/",
+                jwtEntity,
+                AcadPeriodOutDTO.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());  // Verifica que el cuerpo de la respuesta no sea nulo
+    }
+    //Tercera prueba: Verificación de obtención de todos los períodos académicos
+    @Test
+    void testGetAllAcademicPeriodsSmoke() {
+        TestRestTemplate testRestTemplate = new TestRestTemplate();
+        String token = "Bearer " + testUserJWTToken;
+        HttpHeaders headers = getHeaders();
+        headers.set("Authorization", token);
+
+        HttpEntity<String> jwtEntity = new HttpEntity<>(headers);
+        ResponseEntity<List<AcadPeriodOutDTO>> response = testRestTemplate.exchange(
+                server + OUTCURRAPI_V_1_AUTH_ACAD_PERIODS,
+                HttpMethod.GET,
+                jwtEntity, new ParameterizedTypeReference<List<AcadPeriodOutDTO>>() {});
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());  // Verifica que la lista de períodos académicos no sea nula
+    }
+    //Cuarta prueba: Verificación de la actualización de un período académico
+    @Test
+    void testUpdateAcademicPeriodSmoke() {
+        TestRestTemplate testRestTemplate = new TestRestTemplate();
+        String token = "Bearer " + testUserJWTToken;
+        HttpHeaders headers = getHeaders();
+        headers.set("Authorization", token);
+
+        HttpEntity<AcadPeriodInDTO> createAcademicPeriod = new HttpEntity<>(acadPeriodInDTO, headers);
+        ResponseEntity<AcadPeriodOutDTO> responseOfCreateAcPeriod = createAcademicPeriod(testRestTemplate, createAcademicPeriod);
+
+        assertNotNull(responseOfCreateAcPeriod.getBody());
+
+        // Datos actualizados para el período académico
+        AcadPeriodInDTO acPeriodUpdated = AcadPeriodInDTO.builder()
+                .acPeriodNumeric(AC_PERIOD_NUMERIC2)
+                .acPeriodNameSpa(AC_PERIOD_NAME_SPA2)
+                .acPeriodNameEng(AC_PERIOD_NAME_ENG2)
+                .build();
+
+        HttpEntity<AcadPeriodInDTO> updateAcademicPeriod = new HttpEntity<>(acPeriodUpdated, headers);
+        ResponseEntity<AcadPeriodOutDTO> responseOfUpdateAcPeriod = testRestTemplate.exchange(
+                server + OUTCURRAPI_V_1_AUTH_ACAD_PERIODS + "/" + responseOfCreateAcPeriod.getBody().acPeriodId(),
+                HttpMethod.PUT,
+                updateAcademicPeriod,
+                AcadPeriodOutDTO.class);
+
+        assertEquals(HttpStatus.OK, responseOfUpdateAcPeriod.getStatusCode());
+    }
+    //Quinta prueba: Verificación de eliminación de un período académico
+    @Test
+    void testDeleteAcademicPeriodSmoke() {
+        TestRestTemplate testRestTemplate = new TestRestTemplate();
+        String token = "Bearer " + testUserJWTToken;
+        HttpHeaders headers = getHeaders();
+        headers.set("Authorization", token);
+
+        HttpEntity<AcadPeriodInDTO> createAcademicPeriod = new HttpEntity<>(acadPeriodInDTO, headers);
+        ResponseEntity<AcadPeriodOutDTO> responseOfCreateAcPeriod = createAcademicPeriod(testRestTemplate, createAcademicPeriod);
+        assertNotNull(responseOfCreateAcPeriod.getBody());
+
+        HttpEntity<Long> deleteAcademicPeriod = new HttpEntity<>(headers);
+        ResponseEntity<Void> responseOfDeleteAcPeriod = testRestTemplate.exchange(
+                server + OUTCURRAPI_V_1_AUTH_ACAD_PERIODS + "/" + responseOfCreateAcPeriod.getBody().acPeriodId(),
+                HttpMethod.DELETE,
+                deleteAcademicPeriod, Void.class);
+
+        assertEquals(HttpStatus.NO_CONTENT, responseOfDeleteAcPeriod.getStatusCode());
+    }
+
+
 }
