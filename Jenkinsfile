@@ -1,31 +1,34 @@
 pipeline {
-    agent any
+    agent none
     environment {
         DOCKER_PORT = '9090:8080'
     }
     stages {
         stage('Docker Image Build') {
+            agent { label 'initial-node' }
             steps {
                 script {
                     echo 'Docker info'
-                    sh 'docker info'
+                    bat 'docker info'
                     echo 'Build Docker image'
-                    sh 'docker build -t outcome-curr-mgmt-backend .'
+                    bat 'docker build -t outcome-curr-mgmt-backend .'
                 }
             }
         }
 
         stage('Run Unit Tests') {
+            agent { label 'initial-node' }
             steps {
                 script {
                     echo 'Execute unit tests'
-                    sh 'mvn test'
+                    bat 'mvn test'
 
                 }
             }
         }
 
         stage('Deploy and Run App') {
+            agent { label 'initial-node' }
             steps {
                 script {
                     echo 'Run the app'
