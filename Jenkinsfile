@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     echo 'Run the app'
-                    bat "docker run -p ${DOCKER_PORT} outcome-curr-mgmt-backend"
+                    bat "docker run -d -p ${DOCKER_PORT} outcome-curr-mgmt-backend"
                 }
             }
         }
