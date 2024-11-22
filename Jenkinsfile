@@ -4,7 +4,7 @@ pipeline {
         DOCKER_PORT = '9090:8080'
     }
     triggers {
-        githubPullRequest()
+        githubPush()
     }
     stages {
         stage('Docker Image Build') {
