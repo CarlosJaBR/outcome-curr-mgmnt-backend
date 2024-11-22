@@ -3,9 +3,6 @@ pipeline {
     environment {
         DOCKER_PORT = '9090:8080'
     }
-    triggers {
-        githubPush()
-    }
     stages {
 
         stage('Run Unit Tests') {
