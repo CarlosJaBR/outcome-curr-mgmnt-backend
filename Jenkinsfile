@@ -12,6 +12,7 @@ pipeline {
                     echo 'Executing unit tests...'
                     bat 'mvn test'
                 }
+            }
         }
         stage('Docker Image Build') {
             agent { label 'initial-node' }
