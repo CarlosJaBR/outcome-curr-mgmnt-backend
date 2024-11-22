@@ -41,7 +41,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running smoke tests...'
-                    bat 'mvn verify -Dtest=SmokeIT'
+                    bat 'mvn test -Dtest=co.edu.icesi.dev.outcome_curr_mgmt.testing.system.rs.*SmokeIT'
                 }
             }
         }

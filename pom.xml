@@ -37,7 +37,7 @@
                 <version>3.0.0</version>
                 <configuration>
                     <includes>
-                        <include>**/*SmokeIT.java</include>  <!-- Este patrón coincide con las pruebas que terminan en SmokeIT -->
+                        <include>**/co/edu/icesi/dev/outcome_curr_mgmt/testing/system/rs/**/*SmokeIT.java</include>  <!-- Este patrón coincide con las pruebas que terminan en SmokeIT -->
                     </includes>
                 </configuration>
             </plugin>
