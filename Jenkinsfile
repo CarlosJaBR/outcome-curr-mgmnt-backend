@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        DOCKER_PORT = '9090:8080'
+        DOCKER_PORT = '9091:8080'
     }
     stages {
 
