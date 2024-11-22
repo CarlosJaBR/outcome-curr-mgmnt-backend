@@ -41,7 +41,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running smoke tests...'
-                    bat 'mvn verify -Dtest=SmokeTest'
+                    bat 'mvn verify -Dtest=SmokeIT'
                 }
             }
         }
