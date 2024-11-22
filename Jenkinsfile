@@ -12,10 +12,6 @@ pipeline {
                     echo 'Executing unit tests...'
                     bat 'mvn test'
                 }
-                jacoco execPattern: '**/target/jacoco.exec',
-                      classPattern: '**/target/classes',
-                      sourcePattern: '**/src/main/java'
-                }
         }
         stage('Docker Image Build') {
             agent { label 'initial-node' }
