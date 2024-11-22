@@ -31,6 +31,16 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <includes>
+                        <include>**/*SmokeIT.java</include>  <!-- Este patrón coincide con las pruebas que terminan en SmokeIT -->
+                    </includes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
