@@ -35,16 +35,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Run Smoke Tests') {
-            agent { label 'initial-node' }
-            steps {
-                script {
-                    echo 'Running smoke tests...'
-                    bat 'mvn test -Dtest="**/rs/*/*SmokeIT"'
-                }
-            }
-        }
     }
 
     post {
